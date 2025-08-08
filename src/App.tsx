@@ -4,8 +4,7 @@ import html2pdf from "html2pdf.js";
 import { FileText, Download, Eye, Palette, Zap } from "lucide-react";
 
 function App() {
-  const [markdown, setMarkdown] =
-    useState(`# Welcome to Markdown to PDF Converter
+  const [markdown, setMarkdown] = useState(`# Welcome to Markdown to PDF Converter
 
 This is a **powerful** tool that converts your *Markdown* content to PDF with custom styling.
 
@@ -41,16 +40,95 @@ function greet(name) {
 
   const [customCSS, setCustomCSS] = useState(`/* Add your custom CSS here */
 .markdown-body {
-  font-family: 'Georgia', serif;
+  font-family: Barlow, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+  margin: 0;
 }
 
 .markdown-header {
-  color: #2563eb;
-  border-bottom: 2px solid #e5e7eb;
+  font-size: 2.2em;
+  color: #2c3e50;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.markdown-body h2.markdown-header {
+  font-size: 1.8em;
+  color: #34495e;
+  margin: 1.5rem 0;
+}
+
+.markdown-body h3.markdown-header {
+  font-size: 1.4em;
+  color: #455a64;
 }
 
 .markdown-paragraph {
-  line-height: 1.8;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.markdown-list {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-list li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid #ddd;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #666;
+}
+
+.markdown-body pre {
+  background: #2d2d2d;
+  border-radius: 4px;
+  margin: 0.5em 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.markdown-body code {
+  font-family: 'Fira Code', Consolas, Monaco, monospace;
+  color: #e83e8c;
+}
+
+:not(pre) > code {
+  background: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.markdown-body img {
+  max-width: 100%;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.markdown-body th {
+  background-color: #f4f4f4;
+}
+
+/* Highlight React hooks in pink like the image */
+.markdown-body .highlight-hook {
+  color: #e83e8c;
+  font-weight: bold;
 }
 `);
 
@@ -62,41 +140,30 @@ function greet(name) {
     .markdown-body {
       max-width: 100%;
       margin: 0 auto;
-      padding: 2rem;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      font-family: Barlow, sans-serif;
       line-height: 1.6;
-      color: #374151;
+      color: #333;
       background: white;
     }
 
     .markdown-header {
-      color: #1f2937;
-      font-weight: 700;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .markdown-body h1.markdown-header {
-      font-size: 2.25rem;
-      border-bottom: 3px solid #3b82f6;
+      font-size: 2.2em;
+      color: #2c3e50;
+      border-bottom: 2px solid #eee;
       padding-bottom: 0.5rem;
+      margin: 1.5rem 0;
     }
 
     .markdown-body h2.markdown-header {
-      font-size: 1.875rem;
-      border-bottom: 2px solid #6b7280;
-      padding-bottom: 0.25rem;
+      font-size: 1.8em;
+      color: #34495e;
+      margin: 1.5rem 0;
     }
 
     .markdown-body h3.markdown-header {
-      font-size: 1.5rem;
-      color: #4b5563;
-    }
-
-    .markdown-body h4.markdown-header {
-      font-size: 1.25rem;
-      color: #6b7280;
+      font-size: 1.4em;
+      color: #455a64;
     }
 
     .markdown-paragraph {
@@ -114,130 +181,55 @@ function greet(name) {
     }
 
     .markdown-body blockquote {
-      border-left: 5px solid #8b5cf6;
-      padding: 1.5rem 2rem;
-      margin: 2rem 0;
-      font-style: italic;
-      background: linear-gradient(135deg, #f3f0ff 0%, #ede9fe 100%);
-      border-radius: 0 8px 8px 0;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
-      position: relative;
-      color: #5b21b6;
-    }
-
-    .markdown-body blockquote::before {
-      content: '"';
-      font-size: 4rem;
-      color: #c4b5fd;
-      position: absolute;
-      top: -0.5rem;
-      left: 0.5rem;
-      font-family: Georgia, serif;
-      opacity: 0.3;
-    }
-
-    .markdown-body code {
-      background: linear-gradient(135deg, #f3f0ff 0%, #ede9fe 100%);
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      font-family: 'Fira Code', 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: #7c3aed;
-      border: 1px solid #ddd6fe;
-      box-shadow: 0 1px 3px rgba(124, 58, 237, 0.1);
+      border-left: 4px solid #ddd;
+      padding-left: 1em;
+      margin-left: 0;
+      color: #666;
     }
 
     .markdown-body pre {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-      color: #e0e7ff;
-      padding: 1.5rem;
-      border-radius: 12px;
-      overflow-x: auto;
-      margin: 2rem 0;
-      box-shadow: 0 8px 25px rgba(30, 27, 75, 0.3);
-      border: 1px solid #3730a3;
-    }
-
-    .markdown-body pre code {
-      background: transparent;
-      color: inherit;
-      padding: 0;
-      border: none;
-      box-shadow: none;
-      font-size: 0.95rem;
-    }
-
-    .markdown-body table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 2rem 0;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
-    }
-
-    .markdown-body th,
-    .markdown-body td {
-      border: 1px solid #ddd6fe;
+      background: #2d2d2d;
+      border-radius: 4px;
+      margin: 0.5em 0;
       padding: 1rem;
-      text-align: left;
+      overflow-x: auto;
     }
 
-    .markdown-body th {
-      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-      color: white;
-      font-weight: 600;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    .markdown-body code {
+      font-family: 'Fira Code', Consolas, Monaco, monospace;
+      color: #e83e8c;
     }
 
-    .markdown-body td {
-      background: #faf7ff;
-      transition: background-color 0.2s ease;
-    }
-
-    .markdown-body tr:hover td {
-      background: #f3f0ff;
-    }
-
-    .markdown-body a {
-      color: #7c3aed;
-      text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-
-    .markdown-body a:hover {
-      color: #5b21b6;
-      border-bottom-color: #c4b5fd;
-      text-shadow: 0 1px 2px rgba(91, 33, 182, 0.1);
+    :not(pre) > code {
+      background: #f0f0f0;
+      padding: 2px 4px;
+      border-radius: 3px;
     }
 
     .markdown-body img {
       max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin: 1.5rem 0;
-      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
-      border: 1px solid #ddd6fe;
     }
 
-    .markdown-body hr {
-      border: none;
-      height: 3px;
-      background: linear-gradient(135deg, #c4b5fd 0%, #ddd6fe 100%);
-      margin: 3rem 0;
-      border-radius: 2px;
+    .markdown-body table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
     }
 
-    .markdown-body strong {
-      color: #6d28d9;
-      font-weight: 700;
+    .markdown-body th,
+    .markdown-body td {
+      border: 1px solid #ddd;
+      padding: 8px;
     }
 
-    .markdown-body em {
-      color: #8b5cf6;
-      font-style: italic;
+    .markdown-body th {
+      background-color: #f4f4f4;
+    }
+
+    /* Highlight React hooks */
+    .markdown-body .highlight-hook {
+      color: #e83e8c;
+      font-weight: bold;
     }
   `;
 
@@ -245,6 +237,11 @@ function greet(name) {
     marked.setOptions({
       breaks: true,
       gfm: true,
+      highlight: (code) => {
+        // Highlight React hooks in the code
+        return code
+          .replace(/\b(useState|useEffect|useRef|useContext|useReducer)\b/g, '<span class="highlight-hook">$1</span>');
+      },
     });
   }, []);
 
